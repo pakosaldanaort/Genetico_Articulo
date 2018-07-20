@@ -72,7 +72,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = 0;
-                cont++;
+                cont+=50;
                 break;
                 
         }
@@ -137,7 +137,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = 0;
-                cont++;
+                cont+=50;
                 break;
                 
         }
@@ -178,7 +178,7 @@ public class Geneticos_Tools {
     }
     
     public int puntosAntiguedad(String antiguedad){
-        int puntos;
+        int puntos=0;
         switch (antiguedad){
             case "00":
                 puntos = 10;
@@ -197,10 +197,7 @@ public class Geneticos_Tools {
                 break;
                 
                 
-            default:
-                puntos = 0;
-                cont++;
-                break;
+            
                 
         }
         
@@ -261,7 +258,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = 0;
-                cont++;
+                cont+=50;
                 break;
                 
         }
@@ -302,7 +299,7 @@ public class Geneticos_Tools {
     }
     
     public int puntosAmbiente(String ambiente){
-        int puntos;
+        int puntos=0;
         switch (ambiente){
             case "00":
                 puntos = 0;
@@ -321,11 +318,7 @@ public class Geneticos_Tools {
                 break;
                 
                 
-            default:
-                puntos = 0;
-                cont++;
-                break;
-                
+            
         }
         
         return puntos;
@@ -361,7 +354,7 @@ public class Geneticos_Tools {
     }
     
     public double fitness(Cromosoma crom){
-        int barrio,cls,antiguedad,precio,ambientes,a,puntajeCaracteristicas,puntajeRestricciones,costoPorAmbiente =0,probabilidadExistencia =0;
+        int barrio,cls,antiguedad,precio,ambientes,a=0,puntajeCaracteristicas,puntajeRestricciones,costoPorAmbiente =0,probabilidadExistencia =0;
         barrio = this.puntosBarrio(crom.getBarrio());
         cls = this.puntosCls(crom.getCls());
         antiguedad = this.puntosAntiguedad(crom.getAntiguedad());
@@ -372,7 +365,6 @@ public class Geneticos_Tools {
             costoPorAmbiente = (int) (10*(ambientes/precio));
             probabilidadExistencia = (int) (10*(precio/barrio));
         }
-        a = -50;
         
         
         if(costoPorAmbiente<0){
@@ -382,7 +374,7 @@ public class Geneticos_Tools {
             probabilidadExistencia *= -1;
         }
         
-        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia-a;
+        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia-cont;
         cont = 0;
         return puntajeCaracteristicas + puntajeRestricciones;
         
