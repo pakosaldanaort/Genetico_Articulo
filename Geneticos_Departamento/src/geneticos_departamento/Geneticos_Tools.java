@@ -44,7 +44,7 @@ public class Geneticos_Tools {
                 
         
     }
-    
+    int cont=0;
     
     public int puntosBarrio(String barrio){
         int puntos;
@@ -71,6 +71,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = -50;
+                cont++;
                 break;
                 
         }
@@ -104,6 +105,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = -50;
+                cont++;
                 break;
                 
         }
@@ -134,6 +136,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = -50;
+                cont++;
                 break;
                 
         }
@@ -167,6 +170,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = -50;
+                cont++;
                 break;
                 
         }
@@ -197,6 +201,7 @@ public class Geneticos_Tools {
                 
             default:
                 puntos = -50;
+                cont++;
                 break;
                 
         }
@@ -205,26 +210,41 @@ public class Geneticos_Tools {
         
     }
     
-    public void fitness(Cromosoma crom){
+    public double fitness(Cromosoma crom){
         int barrio,cls,antiguedad,precio,ambientes,puntajeCaracteristicas,puntajeRestricciones,costoPorAmbiente,probabilidadExistencia;
         barrio = this.puntosBarrio(crom.getBarrio());
         cls = this.puntosCls(crom.getCls());
         antiguedad = this.puntosAntiguedad(crom.getAntiguedad());
         precio = this.puntosAmbiente(crom.getPrecioAlquiler());
         ambientes = this.puntosAmbiente(crom.getAmbientes());
-        
         puntajeCaracteristicas = barrio + cls + antiguedad + precio + ambientes;
         costoPorAmbiente = (int) (10*(ambientes/precio));
         probabilidadExistencia = (int) (10*(precio/barrio));
-        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia;
-        crom.setFitness(puntajeCaracteristicas + puntajeRestricciones);
+        if(costoPorAmbiente<0){
+            costoPorAmbiente *= -1;
+        }
+        if(probabilidadExistencia<0){
+            probabilidadExistencia *= -1;
+        }
         
+        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia;
+
+        return puntajeCaracteristicas + puntajeRestricciones;
         
     }
     
-    public int selection(ArrayList<Cromosoma> croms){
-        int index =0;
-        double maxFitness= croms.get(0).getFitness();
+    public ArrayList<Cromosoma> selection(ArrayList<Cromosoma> croms, int n){
+        int index =0,cont=0;
+        ArrayList<Cromosoma> aux =  new ArrayList<Cromosoma>();
+        
+        for (int i = 0; i < n; i++) {
+            aux.add(croms.get(croms.size()-1));
+            croms.remove(croms.size()-1);
+            
+        }
+        
+        
+        /*double maxFitness= croms.get(0).getFitness();
         double currentFitness=0;
         for(int i=0; i < croms.size(); i++){
             currentFitness =  croms.get(i).getFitness();
@@ -232,99 +252,70 @@ public class Geneticos_Tools {
                 maxFitness = currentFitness;
                 index = i;
             }
-        }
-        return index;
+        }*/
+        return aux;
     }
     
-    public ArrayList<Cromosoma> crossover(int index,ArrayList<Cromosoma> croms){
-         byte[] mparent1 = croms.get(index).getCromosoma();
+    public ArrayList<Cromosoma> crossover(ArrayList<Cromosoma> croms){
+         byte[] padre = croms.get(0).getCromosoma();
+         byte[] madre = croms.get(1).getCromosoma();
+         byte[] hijo1 = new byte[padre.length];
+         byte[] hijo2 = new byte[padre.length];
+         Cromosoma aux1 = new Cromosoma(13);
+         Cromosoma aux2 = new Cromosoma(13);
          ArrayList<Cromosoma> children = new ArrayList<Cromosoma>();
-         for(int i=0; i < croms.size();i++){
-             if(i!= index){
+ 
+         for (int j = 0; j < padre.length; j++) {
 
-                 byte[] mparent2 = croms.get(i).getCromosoma();
-                 Cromosoma child = new Cromosoma( 13);        
-                 Cromosoma child2 = new Cromosoma( 13 );
-                 child.setCromosoma(newChild(mparent1,mparent2));
-                 child2.setCromosoma(newChild(mparent2,mparent1));
-                 children.add(child);
-                 children.add(child2);
-                 fitness(child);
-                 fitness(child2);
+             if(Math.random()<0.5){
+                hijo1[j]= padre[j];
+                hijo2[j] = madre[j];
 
-             }
+            }
+            else{
+
+                hijo1[j]= madre[j];
+                hijo2[j] = padre[j];
+            }
+
          }
+         aux1.setCromosoma(hijo1);
+         aux2.setCromosoma(hijo2);
+         
+         children.add(aux1);
+         children.add(aux2);
+         
          return children;
 
      }
     
-    public byte[] newChild(byte[] parent1, byte[] parent2){
-        byte[] child = new byte[13];
-        
-        child[0]=parent1[0];
-        child[1]=parent1[1];
-        child[2]=parent2[2];
-        child[3]=parent2[3];
-        child[4]=parent2[4];
-        child[5]=parent1[5];
-        child[6]=parent1[6];
-        child[7]=parent1[7];
-        
-        child[8]=parent1[8];
-        child[9]=parent1[9];
-        child[10]=parent2[10];
-        child[11]=parent2[11];
-        child[12]=parent2[12];
-        
-        
-        return child;
-    } 
+    
     
     public void mutation(ArrayList<Cromosoma> children) {
         byte [] m  = new byte[13];
         int random;
         for(int i=0; i< children.size();i++){
             m = children.get(i).getCromosoma();
-            random =  (int)(Math.random() * (100+1)); 
-            if(random<= 50){
-               
-                for(int j=0;j< m.length; j++){
-                     random =  (int)(Math.random() * (100+1)); 
-                     if(random<= 50){
-                         if(m[j]==0)
-                             m[j]=1;
-                         else
-                             m[j]=0;
-                     }
-                }
-             
+            for(int j=0;j< m.length; j++){
+                 random =  (int)(Math.random() * (100+1)); 
+                 if(random<= 50){
+                     if(m[j]==0)
+                         m[j]=1;
+                     else
+                         m[j]=0;
+                 }
             }
+            
+            children.get(i).setCromosoma(m);
+            
+            
+            
+            
         }
         
     }
     
-    public void limpiar(ArrayList<Cromosoma> crom){
-        int size = crom.size();
-        if(size>10){
-            int index =0;
-            double minFitness=  crom.get(0).getFitness() ;
-            double currentFitness=0;
-            
-            for(int i=0; i < crom.size(); i++){
-                currentFitness =  crom.get(i).getFitness() ;
-                
-                if(currentFitness <  minFitness){
-                    minFitness = currentFitness;
-                    index = i;
-                }
-            }
-          
-            crom.remove(index);
-            limpiar(crom);
-        }
     
-    
-    }
     
     
     public void Bubblesort(ArrayList<Cromosoma> crom){

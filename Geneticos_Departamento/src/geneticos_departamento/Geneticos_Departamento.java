@@ -30,30 +30,57 @@ public class Geneticos_Departamento {
             
             
             
-           a.fitness(cr);
+          double j = a.fitness(cr);
+          cr.setFitness(j);
             
             
             
             
         }
+        a.Bubblesort(c);
+        
         int i = 0;
-        System.out.println(c.toString());
+
         do{
-            int index = a.selection(c);
-            ch = a.crossover(index, c);
+            
+            
+            c = a.selection(c, 2);
+           
+            
+           
+            
+            ch = a.crossover(c);
+
             a.mutation(ch);
-            c = ch;
-            System.out.println(c.toString());
+
+            for (Cromosoma aux : ch) {
+                double d = a.fitness(aux);
+                
+                aux.setFitness(d);
+                
+                c.add(aux);
+                
+            }
+            
+            a.Bubblesort(c);
+            System.out.println(c);
+            
+            
+            //a.crossover(i, ch)
+            //a.mutation(ch);
+            //c = ch;
+            
+           
             i++;
             
-        }while(i==50);
+        }while(i!=100);
         
         
         //System.out.println(a.puntosBarrio(c.get(0).getBarrio()));
-        System.out.println(c.toString());
+       
         
         
-        System.out.println(c.get(a.selection(c)));
+        //System.out.println(c.get(a.selection(c)));
         
         
         
