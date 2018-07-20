@@ -24,7 +24,7 @@ public class Geneticos_Departamento {
         Geneticos_Tools a = new Geneticos_Tools();
         
         ArrayList <Cromosoma> c = a.generateIndividuos(13, 10);
-        ArrayList <Cromosoma> ch = a.generateIndividuos(13, 10);
+        ArrayList <Cromosoma> ch = a.generateIndividuos(13, 20);
         
         for (Cromosoma cr : c) {
             
@@ -45,12 +45,11 @@ public class Geneticos_Departamento {
             
             
             c = a.selection(c, 2);
-           
+
             
-           
+           //a.crossoverMejorado(c);
             
             ch = a.crossover(c);
-
             a.mutation(ch);
 
             for (Cromosoma aux : ch) {
@@ -66,6 +65,7 @@ public class Geneticos_Departamento {
             System.out.println(c);
             
             
+            
             //a.crossover(i, ch)
             //a.mutation(ch);
             //c = ch;
@@ -73,8 +73,16 @@ public class Geneticos_Departamento {
            
             i++;
             
-        }while(i!=100);
+        }while(i!=200);
         
+        
+        
+        System.out.println("best Solution: "+c.get(c.size()-1));
+        System.out.println("Decodificado= Barrio: "+a.toBarrio(c.get(c.size()-1).getBarrio()) 
+                + ", Distancia a la estación de subte mas cercana: " +a.toCls(c.get(c.size()-1).getCls())
+                + ", Antiguedad: " +a.toAntiguedad(c.get(c.size()-1).getAntiguedad())
+                + ", Precio Alquiler: " +a.toPrecio(c.get(c.size()-1).getPrecioAlquiler()) 
+                + ", Ambientes: " +a.toAmbiente(c.get(c.size()-1).getAmbientes()));
         
         //System.out.println(a.puntosBarrio(c.get(0).getBarrio()));
        

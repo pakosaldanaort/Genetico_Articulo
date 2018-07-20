@@ -23,7 +23,8 @@ public class Geneticos_Tools {
            aux  = new byte [size];
            individuo = new Cromosoma(size);
             for (int j = 0; j < size; j++) {
-                if(Math.random()<0.5){
+                
+                if(Math.random()>0.5){
                     aux[j]= 0;
                     
                     
@@ -70,13 +71,44 @@ public class Geneticos_Tools {
                 break;
                 
             default:
-                puntos = -50;
+                puntos = 0;
                 cont++;
                 break;
                 
         }
         
         return puntos;
+        
+    }
+    
+    public String toBarrio(String barrio){
+        String nombre="";
+        switch (barrio){
+            case "010":
+                nombre = "Almagro";
+                break;
+            
+            case "011":
+                nombre = "Balvanera";
+                break;
+                
+            case "100":
+                nombre = "Caballito";
+                break;
+                
+            case "101":
+                nombre = "Belgrano";
+                break;
+                
+            case "110":
+                nombre = "Parque Patricios";
+                break;
+                
+            
+                
+        }
+        
+        return nombre;
         
     }
     
@@ -104,13 +136,44 @@ public class Geneticos_Tools {
                 break;
                 
             default:
-                puntos = -50;
+                puntos = 0;
                 cont++;
                 break;
                 
         }
         
         return puntos;
+        
+    }
+    
+    public String toCls(String cls){
+        String distancia="";
+        switch (cls){
+            case "010":
+                distancia = "Hasta 100 m";
+                break;
+            
+            case "011":
+                distancia = "Entre 100 y 200 metros";
+                break;
+                
+            case "100":
+                distancia = "Entre 200 y 300 metros";
+                break;
+                
+            case "101":
+                distancia = "Entre 300 y 400 metros";
+                break;
+                
+            case "110":
+                distancia = "Más de 400 metros";
+                break;
+                
+            
+                
+        }
+        
+        return distancia;
         
     }
     
@@ -135,13 +198,41 @@ public class Geneticos_Tools {
                 
                 
             default:
-                puntos = -50;
+                puntos = 0;
                 cont++;
                 break;
                 
         }
         
         return puntos;
+        
+    }
+    
+    public String toAntiguedad(String antiguedad){
+        String ant="";
+        switch (antiguedad){
+            case "00":
+                ant = "A estrenar";
+                break;
+            
+            case "01":
+                ant = "hasta 10 años";
+                break;
+                
+            case "11":
+                ant = "hasta 20 años";
+                break;
+                
+            case "10":
+                ant = "30 años o más:";
+                break;
+                
+                
+            
+                
+        }
+        
+        return ant;
         
     }
     
@@ -169,13 +260,44 @@ public class Geneticos_Tools {
                 break;
                 
             default:
-                puntos = -50;
+                puntos = 0;
                 cont++;
                 break;
                 
         }
         
         return puntos;
+        
+    }
+    
+    public String toPrecio(String precio){
+        String pre ="";
+        switch (precio){
+            case "001":
+                pre = "Hasta $3000";
+                break;
+            
+            case "010":
+                pre = "De $3000 a $3500";
+                break;
+                
+            case "011":
+                pre = "De $3500 a $4000";
+                break;
+                
+            case "100":
+                pre = "De $4000 a $5500";
+                break;
+                
+            case "101":
+                pre = "Mayor a $5500";
+                break;
+                
+            
+                
+        }
+        
+        return pre;
         
     }
     
@@ -200,7 +322,7 @@ public class Geneticos_Tools {
                 
                 
             default:
-                puntos = -50;
+                puntos = 0;
                 cont++;
                 break;
                 
@@ -210,16 +332,49 @@ public class Geneticos_Tools {
         
     }
     
+    public String toAmbiente(String ambiente){
+        String amb="";
+        switch (ambiente){
+            case "00":
+                amb = "1 ambiente";
+                break;
+            
+            case "01":
+                amb = "2 ambientes";
+                break;
+                
+            case "10":
+                amb = "3 ambientes";
+                break;
+                
+            case "11":
+                amb = "4 ambientes o más";
+                break;
+                
+                
+            
+                
+        }
+        
+        return amb;
+        
+    }
+    
     public double fitness(Cromosoma crom){
-        int barrio,cls,antiguedad,precio,ambientes,puntajeCaracteristicas,puntajeRestricciones,costoPorAmbiente,probabilidadExistencia;
+        int barrio,cls,antiguedad,precio,ambientes,a,puntajeCaracteristicas,puntajeRestricciones,costoPorAmbiente =0,probabilidadExistencia =0;
         barrio = this.puntosBarrio(crom.getBarrio());
         cls = this.puntosCls(crom.getCls());
         antiguedad = this.puntosAntiguedad(crom.getAntiguedad());
-        precio = this.puntosAmbiente(crom.getPrecioAlquiler());
+        precio = this.puntosPrecio(crom.getPrecioAlquiler());
         ambientes = this.puntosAmbiente(crom.getAmbientes());
         puntajeCaracteristicas = barrio + cls + antiguedad + precio + ambientes;
-        costoPorAmbiente = (int) (10*(ambientes/precio));
-        probabilidadExistencia = (int) (10*(precio/barrio));
+        if(precio != 0 & barrio!=0 ){
+            costoPorAmbiente = (int) (10*(ambientes/precio));
+            probabilidadExistencia = (int) (10*(precio/barrio));
+        }
+        a = -50;
+        
+        
         if(costoPorAmbiente<0){
             costoPorAmbiente *= -1;
         }
@@ -227,8 +382,8 @@ public class Geneticos_Tools {
             probabilidadExistencia *= -1;
         }
         
-        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia;
-
+        puntajeRestricciones = costoPorAmbiente + probabilidadExistencia-a;
+        cont = 0;
         return puntajeCaracteristicas + puntajeRestricciones;
         
     }
@@ -257,6 +412,8 @@ public class Geneticos_Tools {
     }
     
     public ArrayList<Cromosoma> crossover(ArrayList<Cromosoma> croms){
+
+         double ram;
          byte[] padre = croms.get(0).getCromosoma();
          byte[] madre = croms.get(1).getCromosoma();
          byte[] hijo1 = new byte[padre.length];
@@ -266,8 +423,8 @@ public class Geneticos_Tools {
          ArrayList<Cromosoma> children = new ArrayList<Cromosoma>();
  
          for (int j = 0; j < padre.length; j++) {
-
-             if(Math.random()<0.5){
+             ram=Math.random();
+             if(ram<0.5){
                 hijo1[j]= padre[j];
                 hijo2[j] = madre[j];
 
@@ -284,21 +441,65 @@ public class Geneticos_Tools {
          
          children.add(aux1);
          children.add(aux2);
+
          
          return children;
 
      }
     
+    public ArrayList<Cromosoma> crossoverMejorado(ArrayList<Cromosoma> croms){
+  
+         byte[] padre = croms.get(0).getCromosoma();
+         
+         
+         byte[] madre = croms.get(1).getCromosoma();
+ 
+         
+         Cromosoma aux1 = new Cromosoma(13);
+         Cromosoma aux2 = new Cromosoma(13);
+         ArrayList<Cromosoma> children = new ArrayList<Cromosoma>();
+ 
+         
+         aux1.setCromosoma(child(padre,madre));
+         aux2.setCromosoma(child(madre,padre));
+         
+         
+         children.add(aux1);
+         children.add(aux2);
+ 
+         
+         return children;
+
+     }
     
-    
+    public byte[] child(byte [] padre,byte[]madre){
+        
+        byte hijo[] = new byte[13];
+
+        for (int i = 0; i < 4; i++) {
+            hijo[i] = padre[i];
+        }
+        for (int j = 4; j < 8; j++) {
+
+         hijo[j] = madre[j];
+
+
+        }
+        for (int i = 8; i < 13; i++) {
+            hijo[i] = padre[i];
+        }
+        return hijo;
+            
+    }
+
     public void mutation(ArrayList<Cromosoma> children) {
         byte [] m  = new byte[13];
-        int random;
+        double random;
         for(int i=0; i< children.size();i++){
             m = children.get(i).getCromosoma();
             for(int j=0;j< m.length; j++){
-                 random =  (int)(Math.random() * (100+1)); 
-                 if(random<= 50){
+                 random =  Math.random() ; 
+                 if(random<0.5){
                      if(m[j]==0)
                          m[j]=1;
                      else
@@ -314,9 +515,6 @@ public class Geneticos_Tools {
         }
         
     }
-    
-    
-    
     
     public void Bubblesort(ArrayList<Cromosoma> crom){
         Cromosoma buffer;
@@ -344,6 +542,8 @@ public class Geneticos_Tools {
         
         return bytes;
     }
+    
+    
     
     
     
