@@ -20,10 +20,22 @@ public class Cromosoma {
     public String precioAlquiler;
     public String ambientes;
     public String cromoString;
+    public int generacion;
+
+    
+    
     
     
     public Cromosoma(int size){
         cromosoma = new byte[size];
+    }
+    
+    public int getGeneracion() {
+        return generacion;
+    }
+
+    public void setGeneracion(int generacion) {
+        this.generacion = generacion;
     }
 
     public String getBarrio() {
@@ -119,7 +131,7 @@ public class Cromosoma {
             stringCromosoma+= bit;
         }
         
-        return "Cromosoma{" + "cromosoma=" + stringCromosoma + ", fitness=" + fitness + '}';
+        return "Cromosoma{" + "cromosoma=" + stringCromosoma + ", fitness=" + fitness + ", Generacion: "+this.generacion+'}';
     }
     
     
