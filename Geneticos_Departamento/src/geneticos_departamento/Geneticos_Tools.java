@@ -468,17 +468,17 @@ public class Geneticos_Tools {
         
         byte hijo[] = new byte[13];
 
-        for (int i = 0; i < 4; i++) {
-            hijo[i] = padre[i];
+        for (int i = 0; i < 3; i++) {
+            hijo[i] = madre[i];
         }
-        for (int j = 4; j < 8; j++) {
+        for (int j = 3; j < 8; j++) {
 
-         hijo[j] = madre[j];
+         hijo[j] = padre[j];
 
 
         }
         for (int i = 8; i < 13; i++) {
-            hijo[i] = padre[i];
+            hijo[i] = madre[i];
         }
         return hijo;
             
@@ -498,6 +498,34 @@ public class Geneticos_Tools {
                          m[j]=0;
                  }
             }
+            
+            children.get(i).setCromosoma(m);
+            
+            
+            
+            
+        }
+        
+    }
+    
+    public void mutationMejorada(ArrayList<Cromosoma> children) {
+        byte [] m  = new byte[13];
+        double random;
+        for(int i=0; i< children.size();i++){
+            m = children.get(i).getCromosoma();
+            random =  Math.random() ; 
+            if(random < 0.5){
+                for(int j=0;j< m.length; j++){
+                 random =  Math.random() ; 
+                 if(random<0.5){
+                     if(m[j]==0)
+                         m[j]=1;
+                     else
+                         m[j]=0;
+                 }
+                }
+            }
+            
             
             children.get(i).setCromosoma(m);
             
