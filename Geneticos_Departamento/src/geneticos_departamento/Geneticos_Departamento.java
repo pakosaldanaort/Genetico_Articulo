@@ -22,15 +22,21 @@ public class Geneticos_Departamento {
         // TODO code application logic here
         
         Geneticos_Tools a = new Geneticos_Tools();
-        ArrayList  <Double> mejorXGeneracion =  new ArrayList<Double>() ;
-        int topeMax = 40000;
+        ArrayList  <Double> mejoresFitness =  new ArrayList<Double>() ;
+        ArrayList  <ArrayList> historialFitness =  new ArrayList<ArrayList>() ;
+        ArrayList  <Double> historialTime =  new ArrayList<Double>() ;
+        ArrayList  <Cromosoma> fitnessXGenracion;
+        int topeMax = 40000, indexMax=0;
+        long endTime,startTime;
+        double maxFit=0;
         
         for (int b = 0; b < 100; b++) {
             
-            
+            startTime = System.nanoTime();
+
             ArrayList <Cromosoma> c = a.generateIndividuos(13, 10);
             ArrayList <Cromosoma> ch ;
-
+            fitnessXGenracion =  new ArrayList<Cromosoma>() ;
             for (Cromosoma cr : c) {
 
                   double j = a.fitness(cr);
@@ -39,12 +45,12 @@ public class Geneticos_Departamento {
 
                 }
                 a.Bubblesort(c);
-                mejorXGeneracion.add(c.get(c.size()-1).getFitness());
-
+                fitnessXGenracion.add(c.get(c.size()-1));
+                
 
                 int i = 0,cont =0,numMax;
                 double maxFitness = c.get(c.size()-1).getFitness();
-                numMax = 3000;
+                numMax = 70;
 
                 do{
  
@@ -83,12 +89,15 @@ public class Geneticos_Departamento {
                         }
 
                     }
+                    fitnessXGenracion.add(c.get(c.size()-1));
                     
-                
+                    
                     i++;
 
                 }while(i!=topeMax);
                 
+               
+               
                
                 System.out.println("-------------------------------------------------------------------");
                 
@@ -98,8 +107,37 @@ public class Geneticos_Departamento {
                         + ", Antiguedad: " +a.toAntiguedad(c.get(c.size()-1).getAntiguedad())
                         + ", Precio Alquiler: " +a.toPrecio(c.get(c.size()-1).getPrecioAlquiler()) 
                         + ", Ambientes: " +a.toAmbiente(c.get(c.size()-1).getAmbientes()));
+                if(b==0){
+                    maxFit = c.get(c.size()-1).getFitness();
+                    indexMax = b;
+                }
+                else{
+                    if(maxFit < c.get(c.size()-1).getFitness()){
+                        maxFit = c.get(c.size()-1).getFitness();
+                        indexMax = b;
+                    }
+                }
+                endTime = System.nanoTime();
+ 
+               double tiempo = (double) (endTime - startTime)/1000000000;
+                
+                historialFitness.add(fitnessXGenracion);
+                mejoresFitness.add(c.get(c.size()-1).fitness);
+                historialTime.add(tiempo);
+                
+                
             
         }
+        
+        double mac=0;
+        
+        for (int i = 0; i < 100; i++) {
+            mac+=historialTime.get(i);
+            //System.out.println("---------------------------------------------------");
+            //System.out.println(historialTime.get(i));
+        }
+        System.out.println(mac);
+        //System.out.println(maxFit+" "+indexMax);
         
     
       
