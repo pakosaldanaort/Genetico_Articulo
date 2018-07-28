@@ -21,10 +21,14 @@ public class Geneticos_Departamento {
     public static void main(String[] args)  {
         // TODO code application logic here
         Geneticos_Tools a = new Geneticos_Tools();
-        ArrayList <Cromosoma> poblacionRandom = a.generateIndividuos(13, 10);
+        ArrayList <ArrayList> lista = new ArrayList <ArrayList>();
+        for (int i = 0; i < 100; i++) {
+            lista.add(a.generateIndividuos(13, 10));
+        }
         
-        solucionMejorada(poblacionRandom);
-        solucionNormal(poblacionRandom);
+        
+        solucionMejorada(lista);
+        solucionNormal(lista);
       
         
         
@@ -32,7 +36,7 @@ public class Geneticos_Departamento {
         
     }
     
-    public static void solucionMejorada(ArrayList <Cromosoma> poblacion){
+    public static void solucionMejorada(ArrayList <ArrayList> poblacion){
         Geneticos_Tools a = new Geneticos_Tools();
         ArrayList  <Double> mejoresFitness =  new ArrayList<Double>() ;
         ArrayList  <ArrayList> historialFitness =  new ArrayList<ArrayList>() ;
@@ -46,7 +50,7 @@ public class Geneticos_Departamento {
             
             startTime = System.nanoTime();
 
-            ArrayList <Cromosoma> c = (ArrayList <Cromosoma>) poblacion.clone();
+            ArrayList <Cromosoma> c = (ArrayList <Cromosoma>) poblacion.get(b);
             ArrayList <Cromosoma> ch ;
             fitnessXGenracion =  new ArrayList<Cromosoma>() ;
             for (Cromosoma cr : c) {
@@ -167,7 +171,7 @@ public class Geneticos_Departamento {
         //System.out.println(maxFit+" "+indexMax);
     }
     
-    public static void solucionNormal(ArrayList <Cromosoma> poblacion){
+    public static void solucionNormal(ArrayList <ArrayList> poblacion){
         System.out.println("**********************Solucion Normal**********************************");
         Geneticos_Tools a = new Geneticos_Tools();
         ArrayList  <Double> mejoresFitness =  new ArrayList<Double>() ;
@@ -182,7 +186,7 @@ public class Geneticos_Departamento {
             
             startTime = System.nanoTime();
 
-            ArrayList <Cromosoma> c = (ArrayList <Cromosoma>) poblacion.clone();
+            ArrayList <Cromosoma> c = (ArrayList <Cromosoma>) poblacion.get(b);
             ArrayList <Cromosoma> ch ;
             fitnessXGenracion =  new ArrayList<Cromosoma>() ;
             for (Cromosoma cr : c) {
